@@ -5,6 +5,20 @@ import { Alert } from '../../components/UI';
 
 const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,16}$/;
 
+const Field = ({ name, label, type = 'text', placeholder, rows, value, error, onChange }) => (
+  <div>
+    <label htmlFor={`field-${name}`} className="label">{label}</label>
+    {rows ? (
+      <textarea id={`field-${name}`} rows={rows} value={value} onChange={onChange}
+        className="input-field resize-none" placeholder={placeholder} />
+    ) : (
+      <input id={`field-${name}`} type={type} value={value} onChange={onChange}
+        className={`input-field ${error ? 'border-red-700' : ''}`} placeholder={placeholder} />
+    )}
+    {error && <p className="error-text">{error}</p>}
+  </div>
+);
+
 const AddUser = () => {
   const [form, setForm] = useState({ name: '', email: '', password: '', address: '', role: 'user' });
   const [errors, setErrors] = useState({});
@@ -12,6 +26,10 @@ const AddUser = () => {
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const handleChange = (field) => (e) => {
+    setForm(prev => ({ ...prev, [field]: e.target.value }));
+  };
 
   const validate = () => {
     const errs = {};
@@ -47,20 +65,6 @@ const AddUser = () => {
     }
   };
 
-  const Field = ({ name, label, type = 'text', placeholder, rows }) => (
-    <div>
-      <label className="label">{label}</label>
-      {rows ? (
-        <textarea rows={rows} value={form[name]} onChange={e => setForm({ ...form, [name]: e.target.value })}
-          className="input-field resize-none" placeholder={placeholder} />
-      ) : (
-        <input type={type} value={form[name]} onChange={e => setForm({ ...form, [name]: e.target.value })}
-          className={`input-field ${errors[name] ? 'border-red-700' : ''}`} placeholder={placeholder} />
-      )}
-      {errors[name] && <p className="error-text">{errors[name]}</p>}
-    </div>
-  );
-
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 animate-fade-in-up">
       <div className="flex items-center gap-4 mb-8">
@@ -76,14 +80,18 @@ const AddUser = () => {
           <Alert type="error" message={serverError} />
           <Alert type="success" message={success} />
 
-          <Field name="name" label="Full Name" placeholder="Full name (20–60 characters)" />
-          <Field name="email" label="Email Address" type="email" placeholder="user@example.com" />
-          <Field name="password" label="Password" type="password" placeholder="8-16 chars, uppercase + special char" />
-          <Field name="address" label="Address (optional)" placeholder="User's address" rows={3} />
+          <Field name="name" label="Full Name" placeholder="Full name (20–60 characters)"
+            value={form.name} error={errors.name} onChange={handleChange('name')} />
+          <Field name="email" label="Email Address" type="email" placeholder="user@example.com"
+            value={form.email} error={errors.email} onChange={handleChange('email')} />
+          <Field name="password" label="Password" type="password" placeholder="8-16 chars, uppercase + special char"
+            value={form.password} error={errors.password} onChange={handleChange('password')} />
+          <Field name="address" label="Address (optional)" placeholder="User's address" rows={3}
+            value={form.address} error={errors.address} onChange={handleChange('address')} />
 
           <div>
-            <label className="label">Role</label>
-            <select value={form.role} onChange={e => setForm({ ...form, role: e.target.value })} className="input-field">
+            <label htmlFor="field-role" className="label">Role</label>
+            <select id="field-role" value={form.role} onChange={handleChange('role')} className="input-field">
               <option value="user">Normal User</option>
               <option value="store_owner">Store Owner</option>
               <option value="admin">Admin</option>
@@ -103,3 +111,4 @@ const AddUser = () => {
 };
 
 export default AddUser;
+

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL || 'https://store-rating-app-backend-2ak5.onrender.com/api',
   headers: { 'Content-Type': 'application/json' },
 });
 

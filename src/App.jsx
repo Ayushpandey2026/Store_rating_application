@@ -63,7 +63,7 @@ function App() {
             <Route path="/owner" element={<ProtectedRoute roles={['store_owner']}><OwnerDashboard /></ProtectedRoute>} />
 
             {/* Shared */}
-            <Route path="/profile" element={<ProtectedRoute roles={['user', 'store_owner']}><Profile /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute roles={['admin', 'user', 'store_owner']}><Profile /></ProtectedRoute>} />
 
             {/* 404 */}
             <Route path="*" element={<Navigate to="/" replace />} />

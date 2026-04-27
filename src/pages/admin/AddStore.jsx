@@ -18,6 +18,10 @@ const AddStore = () => {
       .catch(() => {});
   }, []);
 
+  const handleChange = (field) => (e) => {
+    setForm(prev => ({ ...prev, [field]: e.target.value }));
+  };
+
   const validate = () => {
     const errs = {};
     if (form.name.length < 20 || form.name.length > 60) errs.name = 'Store name must be 20–60 characters';
@@ -60,29 +64,29 @@ const AddStore = () => {
           <Alert type="success" message={success} />
 
           <div>
-            <label className="label">Store Name</label>
-            <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })}
+            <label htmlFor="store-name" className="label">Store Name</label>
+            <input id="store-name" type="text" value={form.name} onChange={handleChange('name')}
               className={`input-field ${errors.name ? 'border-red-700' : ''}`} placeholder="Store name (20–60 characters)" />
             {errors.name && <p className="error-text">{errors.name}</p>}
           </div>
 
           <div>
-            <label className="label">Store Email</label>
-            <input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })}
+            <label htmlFor="store-email" className="label">Store Email</label>
+            <input id="store-email" type="email" value={form.email} onChange={handleChange('email')}
               className={`input-field ${errors.email ? 'border-red-700' : ''}`} placeholder="store@example.com" />
             {errors.email && <p className="error-text">{errors.email}</p>}
           </div>
 
           <div>
-            <label className="label">Address</label>
-            <textarea rows={3} value={form.address} onChange={e => setForm({ ...form, address: e.target.value })}
+            <label htmlFor="store-address" className="label">Address</label>
+            <textarea id="store-address" rows={3} value={form.address} onChange={handleChange('address')}
               className="input-field resize-none" placeholder="Store address (optional)" />
             {errors.address && <p className="error-text">{errors.address}</p>}
           </div>
 
           <div>
-            <label className="label">Store Owner (optional)</label>
-            <select value={form.owner_id} onChange={e => setForm({ ...form, owner_id: e.target.value })} className="input-field">
+            <label htmlFor="store-owner" className="label">Store Owner (optional)</label>
+            <select id="store-owner" value={form.owner_id} onChange={handleChange('owner_id')} className="input-field">
               <option value="">No owner assigned</option>
               {owners.map(o => (
                 <option key={o.id} value={o.id}>{o.name} ({o.email})</option>

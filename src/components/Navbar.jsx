@@ -35,6 +35,7 @@ const Navbar = () => {
                   <Link to="/admin" className="btn-ghost text-sm">Dashboard</Link>
                   <Link to="/admin/users" className="btn-ghost text-sm">Users</Link>
                   <Link to="/admin/stores" className="btn-ghost text-sm">Stores</Link>
+                  <Link to="/profile" className="btn-ghost text-sm">Profile</Link>
                 </>
               )}
               {user.role === 'user' && (
